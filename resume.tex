@@ -137,7 +137,7 @@
     \small
     \faTelegramPlane \hspace{2pt} \href{https://t.me/xanderkov}{\texttt{@xanderkov}} \hspace{6pt} $|$
     \hspace{6pt} \faGithub \hspace{2pt} \href{https://github.com/xanderkov}{\texttt{xanderkov}} \hspace{6pt} $|$
-    \hspace{6pt} \faLinkedin \hspace{2pt} \href{https://www.linkedin.com/in/--alexander-kovel--/}{\texttt{alexander-kovel}} \hspace{6pt} $|$
+    \hspace{6pt} \faLinkedin \hspace{2pt} \href{https://www.linkedin.com/in/alexander-kovel/}{\texttt{alexander-kovel}} \hspace{6pt} $|$
     \hspace{6pt} \faEnvelope \hspace{2pt} \href{mailto:xanderkovel@gmail.com}{\texttt{xanderkovel@gmail.com}}
     \\ \vspace{-6pt}
 \end{center}
@@ -150,13 +150,21 @@
       {Wildberries}{Jan. 2026 -- Present}
       {Senior MLOps Engineer, ML Platform}{Remote, Moscow, Russia}
       \resumeItemListStart
-        \resumeItem{Scaled the ML inference platform from \textbf{300 to 1,200 RPS}}
-        \resumeItem{Optimized \textbf{Triton Inference Server} for CV/ASR/OCR moderation models: \textbf{3--4x faster OCR} (DALI preprocessing, TensorRT conversion for H200), \textbf{3x faster} ffmpeg preprocessing for transcription}
-        \resumeItem{Modernized GPU infrastructure: upgraded drivers across \textbf{20 A100/H100 nodes}, introduced \textbf{NVIDIA MIG} partitioning, evaluated HAMi for GPU sharing}
-        \resumeItem{Accelerated model rollouts by moving artifact downloads into init containers and building a weight conversion job}
-        \resumeItem{Grew the LLM platform: deployed \textbf{10+ LLMs} (Qwen3, GLM 5 on 8$\times$H200) with vLLM and SGLang; built a \textbf{LiteLLM gateway} with budgets, token limits, routing and external provider proxying}
-        \resumeItem{Launched \textbf{JupyterHub} on GPU VMs with SSO, role-based quotas and alerting}
-        \resumeItem{Built \textbf{MCP servers} (tracker, Grafana, GitLab, wiki) to integrate internal tools with AI agents}
+        % Grafana k8s-vmcluster, moderation_input_gateway_http_requests_total{handler="/moderation/request"}:
+        % weekly avg ~220 RPS (Jul 2026) -> ~1,000 RPS (Nov 2026), peak 1,345; metrics retained only since 2026-06-29
+        \resumeItem{Scaled the moderation inference platform for \textbf{4.5x} traffic growth in 4 months: $\sim$\textbf{220 $\to$ 1,000 RPS} average, peaks 1,300+}
+        \resumeItem{Cut \textbf{OCR} request time \textbf{3x} on \textbf{Triton} at $\sim$180 RPS peak: DALI GPU preprocessing, TensorRT conversion for H200}
+        % TODO: confirm 38 vs 4.5 RPS compare like for like (different models)
+        \resumeItem{Sped up speech transcription \textbf{3x}, then moved it to batched Parakeet: \textbf{38 RPS per H100} vs 4.5 RPS per pod, sustaining 150 RPS}
+        % TODO: confirm node / GPU count (18 nodes in dm+el = 78 GPUs, plus 7 nodes in xs)
+        \resumeItem{Upgraded drivers on \textbf{25 A100/H100 nodes (80+ GPUs)} and rolled out \textbf{NVIDIA MIG}; profiled $\sim$\textbf{160 Triton models} (VRAM, p99, RPS) to plan GPU slicing; evaluated HAMi}
+        % TODO: confirm 8 GPUs were actually freed (TMP-1884)
+        \resumeItem{Built \textbf{GPU cost \& utilization reporting} for 74 services: showed only $\sim$\textbf{33\%} of allocated GPU capacity was used, freed \textbf{8 GPUs} by decommissioning idle LLMs}
+        % TODO: take final error rate from Grafana after the last embedder fix (TMP-1951)
+        % TODO: add rollout time before/after from GitLab pipeline durations
+        \resumeItem{Hardened Triton serving and rollouts: fixed cascading failures at \textbf{2.8K images/s} peak (readiness probes, DALI ragged batching), added prod canary stands for H100/H200-only models, init-container artifact loading and manifest-checked weight uploads}
+        \resumeItem{Deployed \textbf{10+ LLMs} (Qwen3.x, GLM 5.x on 8$\times$H200) with vLLM and SGLang, \textbf{+50\% tokens/s} on GLM; built a \textbf{LiteLLM gateway} with budgets, token limits, routing and logged egress to external providers}
+        \resumeItem{Launched \textbf{JupyterHub} on GPU VMs for $\sim$50 concurrent data scientists (SSO, role-based quotas, idle-GPU reclaim bot); built \textbf{MCP servers} and integrated Grafana, GitLab, wiki and Kubernetes MCPs for AI-agent workflows}
       \resumeItemListEnd
 
     \resumeSubheading
