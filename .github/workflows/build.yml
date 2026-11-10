@@ -1,0 +1,26 @@
+name: Build resume
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: wtfjoke/setup-tectonic@v3
+      - run: tectonic resume.tex
+      - uses: actions/upload-artifact@v4
+        with:
+          name: resume
+          path: resume.pdf
+      - if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: resume.pdf
